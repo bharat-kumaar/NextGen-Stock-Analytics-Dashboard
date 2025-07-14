@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra AI Stock Prediction - Advanced Market Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Preload animations */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .glow-on-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .glow-on-hover:hover {
+            text-shadow: 0 0 20px currentColor;
+            filter: brightness(1.2);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar glass-effect">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-icon glow-element">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <span class="logo-text glow-on-hover">Ultra AI Analytics</span>
+                <div class="logo-status">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">Live</span>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#analysis" class="nav-link" data-section="analysis">
+                    <i class="fas fa-microscope"></i>
+                    <span>AI Analysis</span>
+                </a>
+                <a href="#predictions" class="nav-link" data-section="predictions">
+                    <i class="fas fa-crystal-ball"></i>
+                    <span>Predictions</span>
+                </a>
+                <a href="#trending" class="nav-link" data-section="trending">
+                    <i class="fas fa-fire"></i>
+                    <span>Trending</span>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-background">
+                <div class="hero-grid"></div>
+                <div class="floating-elements">
+                    <div class="float-element" style="--delay: 0s; --x: 10%; --y: 20%;">📈</div>
+                    <div class="float-element" style="--delay: 1s; --x: 85%; --y: 15%;">🤖</div>
+                    <div class="float-element" style="--delay: 2s; --x: 75%; --y: 70%;">💹</div>
+                    <div class="float-element" style="--delay: 3s; --x: 15%; --y: 80%;">🧠</div>
+                </div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-sparkles"></i>
+                    <span>Powered by Advanced AI</span>
+                </div>
+                <h1 class="hero-title floating-element">
+                    <span class="gradient-text shimmer-text">Next-Generation</span><br>
+                    <span class="glow-on-hover">Stock Market Analytics</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Harness the power of machine learning, real-time data streams, and advanced technical analysis 
+                    to make smarter investment decisions with unprecedented accuracy.
+                </p>
+                
+                <!-- Advanced Search -->
+                <div class="search-container">
+                    <div class="search-box advanced-search">
+                        <div class="search-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <input type="text" id="stockInput" placeholder="Enter stock symbols (e.g., AAPL, TSLA, NVDA - separate with commas)" autocomplete="off">
+                        <div class="search-suggestions" id="searchSuggestions"></div>
+                        <button id="searchBtn" class="search-btn">
+                            <span class="btn-text">Analyze</span>
+                            <div class="btn-particles"></div>
+                        </button>
+                    </div>
+                    
+                    <!-- Multi-Stock Quick Select -->
+                    <div class="quick-select-container">
+                        <div class="quick-select-header">
+                            <h4><i class="fas fa-lightning-bolt"></i> Quick Select Popular Stocks</h4>
+                        </div>
+                        <div class="stock-tags">
+                            <div class="stock-tag" data-symbol="AAPL">AAPL</div>
+                            <div class="stock-tag" data-symbol="GOOGL">GOOGL</div>
+                            <div class="stock-tag" data-symbol="MSFT">MSFT</div>
+                            <div class="stock-tag" data-symbol="TSLA">TSLA</div>
+                            <div class="stock-tag" data-symbol="AMZN">AMZN</div>
+                            <div class="stock-tag" data-symbol="META">META</div>
+                            <div class="stock-tag" data-symbol="NVDA">NVDA</div>
+                            <div class="stock-tag" data-symbol="AMD">AMD</div>
+                            <div class="stock-tag" data-symbol="NFLX">NFLX</div>
+                            <div class="stock-tag" data-symbol="CRM">CRM</div>
+                            <div class="stock-tag" data-symbol="BABA">BABA</div>
+                            <div class="stock-tag" data-symbol="DIS">DIS</div>
+                        </div>
+                        <div class="selected-stocks" id="selectedStocks">
+                            <div class="selected-header">
+                                <span>Selected: </span>
+                                <button class="clear-btn" id="clearSelected">Clear All</button>
+                            </div>
+                            <div class="selected-list" id="selectedList"></div>
+                        </div>
+                        <button class="analyze-multiple-btn" id="analyzeMultipleBtn">
+                            <i class="fas fa-chart-bar"></i>
+                            Analyze Selected Stocks
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Bar -->
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-bolt"></i>
+                        <span class="stat-value" id="marketSentiment">Loading...</span>
+                        <span class="stat-label">Market Sentiment</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span class="stat-value" id="lastUpdate">--:--</span>
+                        <span class="stat-label">Last Update</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="stat-value" id="activeUsers">1,247</span>
+                        <span class="stat-label">Active Traders</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="dashboard">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Market Intelligence Dashboard
+                    </h2>
+                    <p class="section-subtitle">Real-time market overview with AI-powered insights</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-background">
+                            <div class="stat-pattern"></div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-data">
+                                <h3 id="totalAnalyzed">0</h3>
+                                <p>Stocks Analyzed Today</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+12%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card success">
+                        <div class="stat-background">
+                            <div class="stat-pattern"></div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <div class="stat-data">
+                                <h3 id="accuracyRate">97.3%</h3>
+                                <p>AI Prediction Accuracy</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+2.1%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card warning">
+                        <div class="stat-background">
+                            <div class="stat-pattern"></div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="stat-data">
+                                <h3 id="modelPerformance">8.9/10</h3>
+                                <p>Model Performance Score</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+0.3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card info">
+                        <div class="stat-background">
+                            <div class="stat-pattern"></div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="stat-data">
+                                <h3 id="dataPoints">2.4M</h3>
+                                <p>Data Points Processed</p>
+                                <div class="stat-trend">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>Real-time</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Analysis Section -->
+        <section id="analysis" class="analysis-section">
+            <div class="container">
+                <div id="stockResult" class="stock-result hidden">
+                    <div class="result-header">
+                        <div class="stock-info">
+                            <h3 id="stockSymbol">AAPL</h3>
+                            <span id="stockName">Apple Inc.</span>
+                            <div class="stock-badges">
+                                <span class="badge" id="marketCapBadge">Large Cap</span>
+                                <span class="badge" id="sectorBadge">Technology</span>
+                            </div>
+                        </div>
+                        <div class="real-time-price">
+                            <div class="price-display">
+                                <span class="currency">$</span>
+                                <span id="currentPrice">150.25</span>
+                                <div class="price-change" id="priceChange">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+2.45 (1.63%)</span>
+                                </div>
+                            </div>
+                            <div class="price-chart-mini" id="priceChartMini">
+                                <canvas id="miniChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-tabs">
+                        <button class="tab-btn active" data-tab="overview">Overview</button>
+                        <button class="tab-btn" data-tab="technical">Technical</button>
+                        <button class="tab-btn" data-tab="realtime">Real-time</button>
+                        <button class="tab-btn" data-tab="risk">Risk Analysis</button>
+                    </div>
+                    
+                    <div class="analysis-content">
+                        <!-- Overview Tab -->
+                        <div class="tab-content active" id="overview">
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <h4>Market Cap</h4>
+                                    <span id="marketCap">2.5T</span>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>P/E Ratio</h4>
+                                    <span id="peRatio">28.5</span>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Beta</h4>
+                                    <span id="beta">1.2</span>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Dividend Yield</h4>
+                                    <span id="dividendYield">0.5%</span>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>52W High</h4>
+                                    <span id="high52w">195.89</span>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>52W Low</h4>
+                                    <span id="low52w">124.17</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Technical Tab -->
+                        <div class="tab-content" id="technical">
+                            <div class="technical-indicators">
+                                <div class="indicator-group">
+                                    <h4>Volatility Analysis</h4>
+                                    <div class="volatility-meter">
+                                        <div class="meter-bar">
+                                            <div class="meter-fill" id="volatilityFill"></div>
+                                        </div>
+                                        <span id="volatilityValue">25.3%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Real-time Tab -->
+                        <div class="tab-content" id="realtime">
+                            <div class="realtime-chart">
+                                <canvas id="realtimeChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Risk Analysis Tab -->
+                        <div class="tab-content" id="risk">
+                            <div class="risk-assessment">
+                                <div class="risk-level">
+                                    <h4>Risk Level</h4>
+                                    <div class="risk-indicator" id="riskIndicator">
+                                        <span class="risk-label">MEDIUM</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Predictions Section -->
+        <section id="predictions" class="predictions-section">
+            <div class="container">
+                <div id="predictionResult" class="prediction-result hidden">
+                    <div class="prediction-header">
+                        <h3>
+                            <i class="fas fa-robot"></i>
+                            AI-Powered 7-Day Forecast
+                        </h3>
+                        <div class="ai-confidence">
+                            <div class="confidence-badge">
+                                <i class="fas fa-brain"></i>
+                                <span>AI Confidence: </span>
+                                <span id="confidenceText">95.2%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="prediction-dashboard">
+                        <div class="prediction-summary">
+                            <div class="trend-card">
+                                <div class="trend-icon" id="trendIcon">
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                                <div class="trend-info">
+                                    <h4>Market Trend</h4>
+                                    <span id="trendDirection">BULLISH</span>
+                                    <div class="trend-strength">
+                                        <span>Strength: </span>
+                                        <span id="trendStrength">Strong</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="target-price">
+                                <h4>7-Day Target</h4>
+                                <div class="target-value">
+                                    <span class="currency">$</span>
+                                    <span id="targetPrice">165.45</span>
+                                </div>
+                                <div class="target-change" id="targetChange">+10.1%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="prediction-chart">
+                            <canvas id="predictionChart"></canvas>
+                        </div>
+                        
+                        <div class="ai-signals">
+                            <h4>
+                                <i class="fas fa-signal"></i>
+                                AI Trading Signals
+                            </h4>
+                            <div class="signals-container" id="signalsContainer">
+                                <!-- Signals will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Multi-Stock Comparison -->
+        <section id="comparison" class="comparison-section">
+            <div class="container">
+                <div id="multiStockResult" class="multi-stock-result hidden">
+                    <div class="section-header">
+                        <h3>
+                            <i class="fas fa-chart-bar"></i>
+                            Multi-Stock Comparison & Analysis
+                        </h3>
+                        <div class="comparison-controls">
+                            <button class="view-btn active" data-view="grid">Grid View</button>
+                            <button class="view-btn" data-view="chart">Chart View</button>
+                            <button class="view-btn" data-view="table">Table View</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Grid View -->
+                    <div class="comparison-content active" id="gridView">
+                        <div class="stocks-comparison-grid" id="stocksGrid">
+                            <!-- Stock comparison cards will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Chart View -->
+                    <div class="comparison-content" id="chartView">
+                        <div class="comparison-chart-container">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Table View -->
+                    <div class="comparison-content" id="tableView">
+                        <div class="comparison-table-container">
+                            <table class="comparison-table" id="comparisonTable">
+                                <thead>
+                                    <tr>
+                                        <th>Symbol</th>
+                                        <th>Current Price</th>
+                                        <th>Change %</th>
+                                        <th>Market Cap</th>
+                                        <th>P/E Ratio</th>
+                                        <th>AI Trend</th>
+                                        <th>Risk Level</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparisonTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Trending Stocks -->
+        <section id="trending" class="trending-section">
+            <div class="container">
+                <div class="section-header">
+                    <h3>
+                        <i class="fas fa-fire"></i>
+                        Market Movers & Trending Stocks
+                    </h3>
+                    <div class="trending-controls">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="gainers">Top Gainers</button>
+                        <button class="filter-btn" data-filter="losers">Top Losers</button>
+                        <button class="filter-btn" data-filter="volume">High Volume</button>
+                    </div>
+                </div>
+                
+                <div id="trendingList" class="trending-grid">
+                    <!-- Trending stocks will be loaded here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Advanced Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-container">
+            <div class="ai-brain">
+                <div class="brain-core"></div>
+                <div class="neural-network">
+                    <div class="node" style="--delay: 0s"></div>
+                    <div class="node" style="--delay: 0.2s"></div>
+                    <div class="node" style="--delay: 0.4s"></div>
+                    <div class="node" style="--delay: 0.6s"></div>
+                </div>
+            </div>
+            <h3>AI is analyzing market data...</h3>
+            <p id="loadingText">Initializing neural networks...</p>
+            <div class="loading-progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
